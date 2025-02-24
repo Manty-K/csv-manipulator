@@ -1,3 +1,5 @@
+/* This file receives data from csv.y and send it to csv-data.c */
+
 #include "../common-headers.h"
 #include "csv-controller.h"
 unsigned int rowNo = 0;
