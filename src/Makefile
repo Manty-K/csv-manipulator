@@ -1,11 +1,13 @@
 CFLAGS = -g -Wextra
 
+DEPS = csv.tab.c rules.tab.c lex.csv.c lex.rules.c main.c csv-controller/csv-controller.c
+
 all: e.o
 	./e.o -c test.csv -r trules.txt -o out.csv
 
 
-e.o: csv.tab.c rules.tab.c lex.csv.c lex.rules.c main.c
-	gcc $(CFLAGS) csv.tab.c rules.tab.c lex.csv.c lex.rules.c main.c -o e.o
+e.o: $(DEPS)
+	gcc $(CFLAGS) $(DEPS) -o e.o
 
 
 lex.csv.c: csv.l

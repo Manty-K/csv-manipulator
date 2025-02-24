@@ -8,9 +8,9 @@
 
 %%
 
-\s*[a-zA-Z]+[a-zA-Z0-9]*\s*      {return LABEL;}
+\s*[a-zA-Z]+[a-zA-Z0-9]*\s*      {csvlval.s = strdup(yytext); return LABEL;}
 
-\s*[0-9]+\s*        {return NUMBER;}
+\s*[0-9]+\s*        {csvlval.s = strdup(yytext); return NUMBER;}
 
 
 ","                     {return COMMA;}

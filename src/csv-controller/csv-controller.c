@@ -1,24 +1,20 @@
 #include "../common-headers.h"
+#include "csv-controller.h"
 unsigned int rowNo = 0;
 unsigned int columnNo = 0;
-
-void incrementRow()
-{
-    rowNo++;
-}
 
 void incrementColumn()
 {
     columnNo++;
 }
 
-void resetColumn()
+void nextRow()
 {
     columnNo = 0;
+    rowNo++;
 }
 
 void addEntry(char *entry)
 {
-
     printf("Entry %s (%d,%d)\n", entry, rowNo, columnNo);
 }
