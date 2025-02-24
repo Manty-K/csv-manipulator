@@ -1,6 +1,6 @@
 *.o
 *.tab.*
-*.lex.*
+*lex.*
 
 *.csv
 *.txt
