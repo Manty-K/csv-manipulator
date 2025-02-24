@@ -30,6 +30,9 @@ entries: e
     | e COMMA entries
 
 e: entry  {addEntry($1); incrementColumn();}
+|   {incrementColumn();}
+;
+
 
 entry : LABEL | NUMBER
 
