@@ -14,6 +14,8 @@
 
 [0-9]+(\.[0-9]+)?      { ruleslval.s = strdup(yytext);  return FLOAT;}
 
+";"                         {ruleslval.s = strdup(yytext); return TERMINATOR;}
+
 "("                        {ruleslval.s = strdup(yytext); return LPAREN;}
 ")"                        {ruleslval.s = strdup(yytext); return RPAREN;}
 
@@ -25,7 +27,7 @@
 
 "<-"            {return ASSIGN;}
 
-\n                  {return NEWLINE;}
+\n                  ;
 
 [\t ]                 ;
 

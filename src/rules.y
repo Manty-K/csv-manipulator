@@ -4,7 +4,7 @@
 %}
 %define api.prefix {rules}
 
-%token ASSIGN NEWLINE RSYM CSYM
+%token ASSIGN RSYM CSYM TERMINATOR
 %token <s> INTEGER FLOAT PLUS MINUS MUL DIV LPAREN RPAREN
 
 %type numval
@@ -16,21 +16,19 @@
     char * s;
 }
 
-%start assign
+%start stmts
 
 
 %%
-// stmts: stmt
-//     | stmts stmt
-//     | NEWLINE
-//     ;
+stmts: stmt stmts
+    |
+    ;
 
-// stmt : assign
+stmt: assign
+
+assign : rc ASSIGN aexpr TERMINATOR
 
 rc : RSYM INTEGER CSYM INTEGER
-
-assign : rc ASSIGN aexpr
-
 
 aexpr: term
     | term PLUS aexpr
@@ -45,7 +43,6 @@ factor: numval
     | rc  
     | LPAREN   aexpr  RPAREN   
     ;
-
 
 numval : INTEGER | FLOAT
 
