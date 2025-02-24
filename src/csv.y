@@ -21,21 +21,18 @@
 }
 
 %%
-lines : line
-    | line lines
+lines : line NEWLINE {nextRow();}
+      | lines line NEWLINE  {nextRow();}
+      ;
+
 line:  entries
-    |  entries n
+     |
+     ;
 
-entries: e
-    | e COMMA entries
+entries: entry { addEntry($1); incrementColumn(); }
+       | entries COMMA entry { addEntry($3); incrementColumn(); }
+       | entries COMMA { incrementColumn(); };
 
-e: entry  {addEntry($1); incrementColumn();}
-|   {incrementColumn();}
-;
-
-
-entry : LABEL | NUMBER
-
-n: NEWLINE  {nextRow();}
+entry : LABEL | NUMBER;
 
 %%
