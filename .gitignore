@@ -1,0 +1,8 @@
+*.o
+*.tab.*
+*.lex.*
+
+*.csv
+*.txt
+
+*.tmp
