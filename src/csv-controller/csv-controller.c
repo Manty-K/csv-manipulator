@@ -2,6 +2,7 @@
 
 #include "../common-headers.h"
 #include "csv-controller.h"
+#include "csv-data.h"
 unsigned int rowNo = 0;
 unsigned int columnNo = 0;
 
@@ -21,10 +22,12 @@ void addEntry(char *entry, int entryType)
     switch (entryType)
     {
     case NUM:
-        printf("Num %s r%d:c%d\n", entry, rowNo, columnNo);
+        // printf("Num %s r%d:c%d\n", entry, rowNo, columnNo);
+        addNumValue(atof(entry), rowNo, columnNo);
         break;
     case STR:
-        printf("Str '%s' r%d:c%d\n", entry, rowNo, columnNo);
+        // printf("Str '%s' r%d:c%d\n", entry, rowNo, columnNo);
+        addStrValue(entry, rowNo, columnNo);
         break;
 
     default:
@@ -32,4 +35,12 @@ void addEntry(char *entry, int entryType)
         exit(1);
         break;
     }
+}
+
+void csvProgramStart()
+{
+}
+
+void csvProgramEnd()
+{
 }

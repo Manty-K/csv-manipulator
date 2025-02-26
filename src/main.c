@@ -1,8 +1,12 @@
 #define _GNU_SOURCE
 #include "common-headers.h"
+#include "csv-controller/csv-controller.h"
+#include "output/output.h"
+#include "csv-controller/csv-data.h"
 
 extern FILE *csvin;
 extern FILE *rulesin;
+extern char *outputFileName;
 
 extern int csvparse(void);
 extern int rulesparse(void);
@@ -29,7 +33,6 @@ int main(int argc, char **argv)
     int opt;
     char *csvFileName = NULL;
     char *rulesFileName = NULL;
-    char *outputFileName = NULL;
 
     while ((opt = getopt(argc, argv, "c:r:o:h")) != -1)
     {
@@ -66,7 +69,9 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
+    csvProgramStart();
     csvparse();
+    csvProgramEnd();
 
     fclose(csvin);
 
@@ -80,6 +85,10 @@ int main(int argc, char **argv)
     rulesparse();
 
     fclose(rulesin);
+
+    openOutfile();
+    processOutput();
+    closeOutfile();
 
     return 0;
 }
