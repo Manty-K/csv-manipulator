@@ -16,7 +16,20 @@ void nextRow()
     rowNo++;
 }
 
-void addEntry(char *entry)
+void addEntry(char *entry, int entryType)
 {
-    printf("Entry '%s' r%d:c%d\n", entry, rowNo, columnNo);
+    switch (entryType)
+    {
+    case NUM:
+        printf("Num %s r%d:c%d\n", entry, rowNo, columnNo);
+        break;
+    case STR:
+        printf("Str '%s' r%d:c%d\n", entry, rowNo, columnNo);
+        break;
+
+    default:
+        fprintf(stderr, "Invalid Entry Type %d\n", entryType);
+        exit(1);
+        break;
+    }
 }

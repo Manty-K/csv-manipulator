@@ -41,8 +41,8 @@ row:  entry
     | row cm
     ;
 
-entry : LABEL {addEntry($1);}
-    | NUMBER  {addEntry($1);}
+entry : LABEL {addEntry($1,STR);}
+    | NUMBER  {addEntry($1,NUM);}
     ;
 
 cm : COMMA  {incrementColumn();}
