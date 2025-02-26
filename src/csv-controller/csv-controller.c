@@ -39,6 +39,7 @@ void addEntry(char *entry, int entryType)
 
 void csvProgramStart()
 {
+    void initializeCSVDatabase();
 }
 
 void csvProgramEnd()

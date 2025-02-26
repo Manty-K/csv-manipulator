@@ -1,13 +1,18 @@
 #include "../common-headers.h"
 #include "csv-data.h"
 #include "../output/output.h"
+#include "../data-structures/data-structures.h"
+
+ARRAY *raw;
 
 void initializeCSVDatabase()
 {
+    raw = createArray(1);
 }
 
 void addCSVDataToDatabase(CSV_DATA *data)
 {
+    appendArray(raw, data);
 }
 
 void addNumValue(float val, unsigned int row, unsigned int col)
