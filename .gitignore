@@ -1,6 +1,7 @@
 *.o
 *.tab.*
 *lex.*
+*.out
 
 *.csv
 *.txt

@@ -37,6 +37,7 @@ void createCSVDatabase()
 
         appendArray(getElementArray(csvDatabase, index), data);
     }
+    printf("CSV data created\n Size: %zu\n", getArraySize(csvDatabase));
 
     freeQueue(dataQueue);
 }
@@ -80,6 +81,148 @@ void displayCSVDATA(CSV_DATA *data)
         break;
     }
 }
+enum fountOrNot
+{
+    FOUND,
+    NOT_FOUND
+};
+typedef struct nearOrExact
+{
+    enum fountOrNot found;
+    unsigned int val;
+} NearOrExact;
+
+// NearOrExact binarySearchNearest(unsigned int val)
+// {
+//     printf("input : %u\n", val);
+//     NearOrExact r;
+//     r.found = NOT_FOUND;
+
+//     unsigned int left = 0;
+//     unsigned int right = getArraySize(csvDatabase) - 1;
+
+//     printf("low : %d right : %d\n", left, right);
+//     unsigned int result;
+
+//     while (left < right)
+//     {
+//         unsigned int mid = left + (right - left) / 2;
+//         printf("mid: %u\n", mid);
+//         CSV_DATA *data = getElementArray(getElementArray(csvDatabase, mid), 0);
+//         if (data->rowNo == val)
+//         {
+//             r.found = FOUND;
+//             r.val = mid;
+//             return r;
+//         }
+
+//         if (val > data->rowNo)
+//         {
+//             r.val = mid;
+//             left = mid + 1;
+//         }
+//         else
+//         {
+//             right = mid - 1;
+//         }
+//     }
+
+//     printf("Returning %u\n", r.val);
+
+//     return r;
+// }
+
+NearOrExact linearSearchNearestRow(unsigned int val)
+{
+    unsigned int size = getArraySize(csvDatabase);
+
+    NearOrExact ne;
+    ne.val = 0;
+    ne.found = NOT_FOUND;
+
+    for (int i = size - 1; i >= 0; i--)
+    {
+        CSV_DATA *data = getElementArray(getElementArray(csvDatabase, i), 0);
+
+        if (data->rowNo == val)
+        {
+            ne.found == FOUND;
+            ne.val = i;
+            break;
+        }
+        else if (data->rowNo < val)
+        {
+            ne.val = i;
+            break;
+        }
+    }
+
+    return ne;
+}
+
+void insertOrReplace(ARRAY *arr, CSV_DATA *data)
+{
+    unsigned int i = 0;
+    CSV_DATA *d = getElementArray(arr, i);
+    while (d->colNo <= data->colNo)
+    {
+        d = getElementArray(arr, i);
+        i++;
+    }
+
+    if (d->colNo == data->colNo)
+    {
+        setElementArray(arr, i - 1, data);
+        puts("setting");
+    }
+    else
+    {
+        insertArray(arr, i - 1, data);
+        puts("inserting");
+    }
+}
+
+void insertOrAppend(CSV_DATA *data, size_t neval)
+{
+    puts("Insert or append");
+    ARRAY *arr = createArray(1);
+    appendArray(arr, data);
+    size_t csvsize = getArraySize(csvDatabase);
+
+    CSV_DATA *last = getElementArray(getElementArray(csvDatabase, csvsize - 1), 0);
+
+    if (last->rowNo < data->rowNo)
+    {
+        appendArray(csvDatabase, arr);
+    }
+    else
+    {
+        insertArray(csvDatabase, neval, arr);
+    }
+}
+
+void addDataToCSV(CSV_DATA *data)
+{
+
+    NearOrExact ne = linearSearchNearestRow(data->rowNo);
+    printf("search done index %u and %s\n", ne.val, ne.found == FOUND ? "found" : "not found");
+
+    if (ne.found == FOUND)
+    {
+
+        insertOrReplace(getElementArray(csvDatabase, ne.val), data);
+    }
+    else if (ne.found == NOT_FOUND)
+    {
+
+        insertOrAppend(data, ne.val);
+    }
+    else
+    {
+        fprintf(stderr, "Should be found or not found\n");
+        exit(1);
+    }
+}
 
 void repeatPrintStr(char *str, unsigned int count)
 {
@@ -103,6 +246,7 @@ void displayDatabase()
         for (unsigned int j = 0; j < size; j++)
         {
             CSV_DATA *data = getElementArray(getElementArray(csvDatabase, i), j);
+            displayCSVDATA(data);
 
             if (data->rowNo > currentRowIndex)
             {
@@ -130,5 +274,11 @@ void displayDatabase()
 
 void processOutput()
 {
+    CSV_DATA *data = malloc(sizeof(CSV_DATA));
+    data->colNo = 2,
+    data->rowNo = 1;
+    data->value.f = 10;
+    data->valueType = NUM_TYPE;
+    addDataToCSV(data);
     displayDatabase();
 }

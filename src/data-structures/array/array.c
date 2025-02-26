@@ -68,7 +68,7 @@ void *getElementArray(ARRAY *array, size_t index)
 {
     if (array == NULL || index >= array->filled)
     {
-        fprintf(stderr, "Index %zu out of bounds. Filled: %zu, Cap: %zu\n",
+        fprintf(stderr, "get : Index %zu out of bounds. Filled: %zu, Cap: %zu\n",
                 index, array ? array->filled : 0, array ? array->cap : 0);
         return NULL;
     }
