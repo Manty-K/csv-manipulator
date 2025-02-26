@@ -3,8 +3,8 @@
 #include "../common-headers.h"
 #include "csv-controller.h"
 #include "csv-data.h"
-unsigned int rowNo = 0;
-unsigned int columnNo = 0;
+unsigned int rowNo = 1;
+unsigned int columnNo = 1;
 
 void incrementColumn()
 {
@@ -39,9 +39,10 @@ void addEntry(char *entry, int entryType)
 
 void csvProgramStart()
 {
-    void initializeCSVDatabase();
+    initializeCSVDatabase();
 }
 
 void csvProgramEnd()
 {
+    createCSVDatabase();
 }

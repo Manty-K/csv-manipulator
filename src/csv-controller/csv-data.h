@@ -7,6 +7,7 @@ void addNumValue(float val, unsigned int row, unsigned int col);
 void addStrValue(char *val, unsigned int row, unsigned int col);
 
 void processOutput();
+void createCSVDatabase();
 typedef union csv_value
 {
     char *s;

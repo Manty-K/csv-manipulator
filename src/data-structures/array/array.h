@@ -3,24 +3,24 @@ typedef struct
 {
 
     void **ptr;
-    int cap;
-    int filled;
+    size_t cap;
+    size_t filled;
 
 } ARRAY;
 
-ARRAY *createArray(int);
+ARRAY *createArray(size_t);
 
 void appendArray(ARRAY *, void *);
 
-void *getElementArray(ARRAY *, int);
+void *getElementArray(ARRAY *, size_t);
 
-void setElementArray(ARRAY *, int, void *);
+void setElementArray(ARRAY *, size_t, void *);
 
 void *popElementArray(ARRAY *);
-void insertArray(ARRAY *array, int index, void *data);
+void insertArray(ARRAY *array, size_t index, void *data);
 
 char isEmptyArray(ARRAY *array);
-int getArraySize(ARRAY *array);
+size_t getArraySize(ARRAY *array);
 void freeArray(ARRAY *);
 
 #endif

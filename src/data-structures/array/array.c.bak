@@ -5,15 +5,15 @@
 typedef struct
 {
     void **ptr;
-    size_t cap;
-    size_t filled;
+    int cap;
+    int filled;
 } ARRAY;
 
-ARRAY *createArray(size_t capacity)
+ARRAY *createArray(int capacity)
 {
-    if (capacity == 0)
+    if (capacity <= 0)
     {
-        fprintf(stderr, "Invalid capacity: %zu\n", capacity);
+        fprintf(stderr, "Invalid capacity: %d\n", capacity);
         return NULL;
     }
     ARRAY *arr = malloc(sizeof(ARRAY));
@@ -33,7 +33,6 @@ ARRAY *createArray(size_t capacity)
     }
     return arr;
 }
-
 char isEmptyArray(ARRAY *array)
 {
     return array == NULL || array->filled == 0;
@@ -46,8 +45,8 @@ void appendArray(ARRAY *array, void *data)
 
     if (array->filled == array->cap)
     {
-        size_t newCap = array->cap * 2;
-        if (newCap < array->cap) // Overflow check
+        int newCap = array->cap * 2;
+        if (newCap < array->cap)
         {
             fprintf(stderr, "Array capacity overflow.\n");
             return;
@@ -64,18 +63,18 @@ void appendArray(ARRAY *array, void *data)
     array->ptr[array->filled++] = data;
 }
 
-void *getElementArray(ARRAY *array, size_t index)
+void *getElementArray(ARRAY *array, int index)
 {
-    if (array == NULL || index >= array->filled)
+    if (array == NULL || index >= array->filled || index < 0)
     {
-        fprintf(stderr, "Index %zu out of bounds. Filled: %zu, Cap: %zu\n",
-                index, array ? array->filled : 0, array ? array->cap : 0);
+        fprintf(stderr, "Index %d out of bounds. Filled: %d, Cap: %d\n",
+                index, array ? array->filled : -1, array ? array->cap : -1);
         return NULL;
     }
     return array->ptr[index];
 }
 
-void setElementArray(ARRAY *array, size_t index, void *data)
+void setElementArray(ARRAY *array, int index, void *data)
 {
     if (array == NULL || index >= array->filled)
     {
@@ -96,18 +95,18 @@ void *popElementArray(ARRAY *array)
     return array->ptr[--array->filled];
 }
 
-void insertArray(ARRAY *array, size_t index, void *data)
+void insertArray(ARRAY *array, int index, void *data)
 {
-    if (array == NULL || index > array->filled)
+    if (array == NULL || index < 0 || index > array->filled)
     {
-        fprintf(stderr, "Index %zu out of bounds for insertion.\n", index);
+        fprintf(stderr, "Index %d out of bounds for insertion.\n", index);
         return;
     }
 
     if (array->filled == array->cap)
     {
-        size_t newCap = array->cap * 2;
-        if (newCap < array->cap) // Overflow check
+        int newCap = array->cap * 2;
+        if (newCap < array->cap)
         {
             fprintf(stderr, "Array capacity overflow.\n");
             return;
@@ -122,8 +121,8 @@ void insertArray(ARRAY *array, size_t index, void *data)
         array->cap = newCap;
     }
 
-    // Shift elements to the right
-    for (size_t i = array->filled; i > index; i--)
+    // Shift right elements to right
+    for (int i = array->filled; i > index; i--)
     {
         array->ptr[i] = array->ptr[i - 1];
     }
@@ -132,9 +131,9 @@ void insertArray(ARRAY *array, size_t index, void *data)
     array->filled++;
 }
 
-size_t getArraySize(ARRAY *arr)
+int getArraySize(ARRAY *arr)
 {
-    return arr ? arr->filled : 0;
+    return arr->filled;
 }
 
 void freeArray(ARRAY *array, void (*free_func)(void *))
@@ -143,7 +142,7 @@ void freeArray(ARRAY *array, void (*free_func)(void *))
         return;
     if (free_func != NULL)
     {
-        for (size_t i = 0; i < array->filled; i++)
+        for (int i = 0; i < array->filled; i++)
         {
             free_func(array->ptr[i]);
         }
