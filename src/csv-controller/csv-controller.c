@@ -18,5 +18,5 @@ void nextRow()
 
 void addEntry(char *entry)
 {
-    printf("Entry %s (%d,%d)\n", entry, rowNo, columnNo);
+    printf("Entry '%s' r%d:c%d\n", entry, rowNo, columnNo);
 }

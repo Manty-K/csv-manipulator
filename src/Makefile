@@ -14,13 +14,13 @@ lex.csv.c: csv.l
 	flex csv.l
 
 csv.tab.c: csv.y
-	bison -d csv.y
+	bison -d -Wcounterexamples csv.y
 
 lex.rules.c: rules.l
 	flex rules.l
 
 rules.tab.c: rules.y
-	bison -d rules.y
+	bison -d -Wcounterexamples rules.y
 
 
 clean:

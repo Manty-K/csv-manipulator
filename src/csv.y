@@ -12,7 +12,8 @@
 
 %type <s> entry
 
-%start lines
+%start rowsMain
+
 
 %union{
     int i;
@@ -21,18 +22,33 @@
 }
 
 %%
-lines : line NEWLINE {nextRow();}
-      | lines line NEWLINE  {nextRow();}
-      ;
 
-line:  entries
-     |
-     ;
+rowsMain : rows
+    | // Empty file
+    ;
 
-entries: entry { addEntry($1); incrementColumn(); }
-       | entries COMMA entry { addEntry($3); incrementColumn(); }
-       | entries COMMA { incrementColumn(); };
+rows: row
+    | row nl
+    | row nl rows
+    | nl rows
+    | nl
+    ;
 
-entry : LABEL | NUMBER;
+row:  entry
+    | cm
+    | cm entry
+    | row cm entry
+    | row cm
+    ;
+
+entry : LABEL {addEntry($1);}
+    | NUMBER  {addEntry($1);}
+    ;
+
+cm : COMMA  {incrementColumn();}
+    ;
+
+nl : NEWLINE {nextRow();}
+    ;
 
 %%
