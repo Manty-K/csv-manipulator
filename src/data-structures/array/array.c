@@ -95,6 +95,42 @@ void *popElementArray(ARRAY *array)
     return array->ptr[--array->filled];
 }
 
+void insertArray(ARRAY *array, int index, void *data)
+{
+    if (array == NULL || index < 0 || index > array->filled)
+    {
+        fprintf(stderr, "Index %d out of bounds for insertion.\n", index);
+        return;
+    }
+
+    if (array->filled == array->cap)
+    {
+        int newCap = array->cap * 2;
+        if (newCap < array->cap)
+        {
+            fprintf(stderr, "Array capacity overflow.\n");
+            return;
+        }
+        void **newPtr = realloc(array->ptr, sizeof(void *) * newCap);
+        if (newPtr == NULL)
+        {
+            fprintf(stderr, "realloc failed!\n");
+            return;
+        }
+        array->ptr = newPtr;
+        array->cap = newCap;
+    }
+
+    // Shift right elements to right
+    for (int i = array->filled; i > index; i--)
+    {
+        array->ptr[i] = array->ptr[i - 1];
+    }
+
+    array->ptr[index] = data;
+    array->filled++;
+}
+
 int getArraySize(ARRAY *arr)
 {
     return arr->filled;
