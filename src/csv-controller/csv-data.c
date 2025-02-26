@@ -6,18 +6,6 @@
 ARRAY *csvDatabase;
 QUEUE *dataQueue;
 
-typedef struct csvRow
-{
-    unsigned int rowNo;
-    ARRAY *row;
-} CSV_ROW;
-
-typedef struct csvCol
-{
-    unsigned int colNo;
-    CSV_DATA *data;
-} CSV_COL;
-
 void initializeCSVDatabase()
 {
     csvDatabase = createArray(1);
@@ -115,7 +103,6 @@ void displayDatabase()
         for (unsigned int j = 0; j < size; j++)
         {
             CSV_DATA *data = getElementArray(getElementArray(csvDatabase, i), j);
-            displayCSVDATA(data);
 
             if (data->rowNo > currentRowIndex)
             {
