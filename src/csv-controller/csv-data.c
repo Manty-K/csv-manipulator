@@ -75,37 +75,57 @@ void addStrValue(char *val, unsigned int row, unsigned int col)
     addCSVDataToQueue(csvData);
 }
 
+void displayCSVDATA(CSV_DATA *data)
+{
+    switch (data->valueType)
+    {
+    case NUM_TYPE:
+        printf("Num %.1f r%d:c%d\n", data->value.f, data->rowNo, data->colNo);
+        break;
+    case STR_TYPE:
+        printf("Str '%s' r%d:c%d\n", data->value.s, data->rowNo, data->colNo);
+        break;
+
+    default:
+        fprintf(stderr, "Invalid Entry Type %d\n", data->valueType);
+        exit(1);
+        break;
+    }
+}
+
+void repeatPrintStr(char *str, unsigned int count)
+{
+    for (unsigned int i = 0; i < count; i++)
+    {
+        appendFile(str);
+    }
+}
+
 void displayDatabase()
 {
     unsigned int currentRowIndex = 1;
+    unsigned int currentColIndex;
+    unsigned int size;
 
     for (unsigned int i = 0; i < getArraySize(csvDatabase); i++)
     {
-        int prevEle = 0;
-        unsigned int currentColIndex = 1;
-        unsigned int size = getArraySize(getElementArray(csvDatabase, i));
+        currentColIndex = 1;
+        size = getArraySize(getElementArray(csvDatabase, i));
 
         for (unsigned int j = 0; j < size; j++)
         {
             CSV_DATA *data = getElementArray(getElementArray(csvDatabase, i), j);
+            displayCSVDATA(data);
 
             if (data->rowNo > currentRowIndex)
             {
-
-                while (currentRowIndex != data->rowNo)
-                {
-                    appendFile("\n");
-                    currentRowIndex++;
-                }
+                repeatPrintStr("\n", data->rowNo - currentRowIndex);
+                currentRowIndex = data->rowNo;
             }
-            if (data->colNo > currentColIndex)
+            if (currentColIndex < data->colNo)
             {
-
-                while (currentColIndex != data->colNo)
-                {
-                    appendFile(",");
-                    currentColIndex++;
-                }
+                repeatPrintStr(",", data->colNo - currentColIndex);
+                currentColIndex = data->colNo;
             }
 
             if (data->valueType == STR_TYPE)
@@ -117,8 +137,6 @@ void displayDatabase()
             {
                 appendFile("%.1f", data->value.f);
             }
-
-            appendFile(j + 1 != size ? "," : "");
         }
     }
 }
@@ -126,5 +144,4 @@ void displayDatabase()
 void processOutput()
 {
     displayDatabase();
-    // appendFile("1,2,3");
 }

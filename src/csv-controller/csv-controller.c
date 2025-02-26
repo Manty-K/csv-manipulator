@@ -13,7 +13,7 @@ void incrementColumn()
 
 void nextRow()
 {
-    columnNo = 0;
+    columnNo = 1;
     rowNo++;
 }
 
