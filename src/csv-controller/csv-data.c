@@ -77,32 +77,54 @@ void addStrValue(char *val, unsigned int row, unsigned int col)
 
 void displayDatabase()
 {
+    unsigned int currentRowIndex = 1;
+
     for (unsigned int i = 0; i < getArraySize(csvDatabase); i++)
     {
+        int prevEle = 0;
+        unsigned int currentColIndex = 1;
         unsigned int size = getArraySize(getElementArray(csvDatabase, i));
 
         for (unsigned int j = 0; j < size; j++)
         {
             CSV_DATA *data = getElementArray(getElementArray(csvDatabase, i), j);
 
+            if (data->rowNo > currentRowIndex)
+            {
+
+                while (currentRowIndex != data->rowNo)
+                {
+                    appendFile("\n");
+                    currentRowIndex++;
+                }
+            }
+            if (data->colNo > currentColIndex)
+            {
+
+                while (currentColIndex != data->colNo)
+                {
+                    appendFile(",");
+                    currentColIndex++;
+                }
+            }
+
             if (data->valueType == STR_TYPE)
             {
-                printf("\"%s\"", data->value.s);
+                appendFile("%s", data->value.s);
             }
 
             if (data->valueType == NUM_TYPE)
             {
-                printf("%.1f", data->value.f);
+                appendFile("%.1f", data->value.f);
             }
 
-            printf(j + 1 != size ? ", " : "");
+            appendFile(j + 1 != size ? "," : "");
         }
-        printf("\n");
     }
 }
 
 void processOutput()
 {
     displayDatabase();
-    appendFile("1,2,3");
+    // appendFile("1,2,3");
 }
