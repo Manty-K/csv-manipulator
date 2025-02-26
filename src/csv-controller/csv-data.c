@@ -37,7 +37,7 @@ void createCSVDatabase()
 
         appendArray(getElementArray(csvDatabase, index), data);
     }
-    printf("CSV data created\n Size: %zu\n", getArraySize(csvDatabase));
+    // printf("CSV data created\n Size: %zu\n", getArraySize(csvDatabase));
 
     freeQueue(dataQueue);
 }
@@ -92,46 +92,6 @@ typedef struct nearOrExact
     unsigned int val;
 } NearOrExact;
 
-// NearOrExact binarySearchNearest(unsigned int val)
-// {
-//     printf("input : %u\n", val);
-//     NearOrExact r;
-//     r.found = NOT_FOUND;
-
-//     unsigned int left = 0;
-//     unsigned int right = getArraySize(csvDatabase) - 1;
-
-//     printf("low : %d right : %d\n", left, right);
-//     unsigned int result;
-
-//     while (left < right)
-//     {
-//         unsigned int mid = left + (right - left) / 2;
-//         printf("mid: %u\n", mid);
-//         CSV_DATA *data = getElementArray(getElementArray(csvDatabase, mid), 0);
-//         if (data->rowNo == val)
-//         {
-//             r.found = FOUND;
-//             r.val = mid;
-//             return r;
-//         }
-
-//         if (val > data->rowNo)
-//         {
-//             r.val = mid;
-//             left = mid + 1;
-//         }
-//         else
-//         {
-//             right = mid - 1;
-//         }
-//     }
-
-//     printf("Returning %u\n", r.val);
-
-//     return r;
-// }
-
 NearOrExact linearSearchNearestRow(unsigned int val)
 {
     unsigned int size = getArraySize(csvDatabase);
@@ -143,10 +103,9 @@ NearOrExact linearSearchNearestRow(unsigned int val)
     for (int i = size - 1; i >= 0; i--)
     {
         CSV_DATA *data = getElementArray(getElementArray(csvDatabase, i), 0);
-
         if (data->rowNo == val)
         {
-            ne.found == FOUND;
+            ne.found = FOUND;
             ne.val = i;
             break;
         }
@@ -162,29 +121,38 @@ NearOrExact linearSearchNearestRow(unsigned int val)
 
 void insertOrReplace(ARRAY *arr, CSV_DATA *data)
 {
-    unsigned int i = 0;
-    CSV_DATA *d = getElementArray(arr, i);
-    while (d->colNo <= data->colNo)
+    size_t rowsize = getArraySize(arr);
+    CSV_DATA *cdt = getElementArray(arr, rowsize - 1);
+
+    if (cdt->colNo < data->colNo)
     {
-        d = getElementArray(arr, i);
-        i++;
+
+        appendArray(arr, data);
+        return;
     }
 
-    if (d->colNo == data->colNo)
+    for (size_t i = 0; i < rowsize; i++)
     {
-        setElementArray(arr, i - 1, data);
-        puts("setting");
-    }
-    else
-    {
-        insertArray(arr, i - 1, data);
-        puts("inserting");
+        cdt = getElementArray(arr, i);
+
+        if (cdt->colNo == data->colNo)
+        {
+
+            setElementArray(arr, i, data);
+            return;
+        }
+
+        if (cdt->colNo > data->colNo)
+        {
+
+            insertArray(arr, i, data);
+            return;
+        }
     }
 }
 
 void insertOrAppend(CSV_DATA *data, size_t neval)
 {
-    puts("Insert or append");
     ARRAY *arr = createArray(1);
     appendArray(arr, data);
     size_t csvsize = getArraySize(csvDatabase);
@@ -201,11 +169,20 @@ void insertOrAppend(CSV_DATA *data, size_t neval)
     }
 }
 
+void checkValidCSVDataRange(CSV_DATA *data)
+{
+    if (data->colNo <= 0 || data->rowNo <= 0)
+    {
+        fprintf(stderr, "Invalid csv data range. r%u:c%u\n", data->rowNo, data->colNo);
+        exit(1);
+    }
+}
+
 void addDataToCSV(CSV_DATA *data)
 {
+    checkValidCSVDataRange(data);
 
     NearOrExact ne = linearSearchNearestRow(data->rowNo);
-    printf("search done index %u and %s\n", ne.val, ne.found == FOUND ? "found" : "not found");
 
     if (ne.found == FOUND)
     {
@@ -246,7 +223,7 @@ void displayDatabase()
         for (unsigned int j = 0; j < size; j++)
         {
             CSV_DATA *data = getElementArray(getElementArray(csvDatabase, i), j);
-            displayCSVDATA(data);
+            // displayCSVDATA(data);
 
             if (data->rowNo > currentRowIndex)
             {
@@ -274,11 +251,11 @@ void displayDatabase()
 
 void processOutput()
 {
-    CSV_DATA *data = malloc(sizeof(CSV_DATA));
-    data->colNo = 2,
-    data->rowNo = 1;
-    data->value.f = 10;
-    data->valueType = NUM_TYPE;
-    addDataToCSV(data);
+    // CSV_DATA *data = malloc(sizeof(CSV_DATA));
+    // data->colNo = 30,
+    // data->rowNo = 20;
+    // data->value.f = 15;
+    // data->valueType = NUM_TYPE;
+    // addDataToCSV(data);
     displayDatabase();
 }
