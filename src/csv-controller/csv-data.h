@@ -29,7 +29,7 @@ typedef struct rc
 
 typedef struct csvData
 {
-    int valueType;
+    enum valueType valueType;
     CSV_VALUE value;
     unsigned int rowNo;
     unsigned int colNo;

@@ -1,4 +1,6 @@
 %{
+    #include "common-headers.h"
+    #include "rules-controller/rules-controller.h"
     int ruleslex(void);
     void ruleserror(const char *);
 %}
@@ -24,15 +26,18 @@ stmts: stmt stmts
     |
     ;
 
-stmt: assign | assignStr
+stmt: assign
+    | assignStr
+    ;
 
-assignStr: rc_or_lab ASSIGN STRING TERMINATOR
+assignStr: rc ASSIGN STRING TERMINATOR { assignString($3);}
+    ;
 
-assign : rc_or_lab ASSIGN aexpr TERMINATOR
+assign : rc ASSIGN aexpr TERMINATOR
 
-rc_or_lab : rc | LABEL
 
-rc : RSYM INTEGER CSYM INTEGER
+
+rc : RSYM INTEGER CSYM INTEGER      {setRC(atoi($2), atoi($4));}
 
 aexpr: term
     | term PLUS aexpr
@@ -45,7 +50,6 @@ term: factor
 
 factor: numval  
     | rc  
-    | LABEL
     | LPAREN   aexpr  RPAREN   
     ;
 
