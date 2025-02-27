@@ -1,6 +1,7 @@
 %{
     #include "common-headers.h"
     #include "rules-controller/rules-controller.h"
+    #include "rules-controller/expression-handler.h"
     int ruleslex(void);
     void ruleserror(const char *);
 %}
@@ -9,7 +10,7 @@
 %token ASSIGN RSYM CSYM TERMINATOR
 %token <s> INTEGER FLOAT PLUS MINUS MUL DIV LPAREN RPAREN LABEL STRING
 
-%type numval
+%type <s> numval
 
 %union {
 
@@ -33,23 +34,24 @@ stmt: assign
 assignStr: rc ASSIGN STRING TERMINATOR { assignString($3);}
     ;
 
-assign : rc ASSIGN aexpr TERMINATOR
+assign : rc ASSIGN { setIndentifier(); expressionStart();} aexpr { expressionEnd();} TERMINATOR
 
 
 
 rc : RSYM INTEGER CSYM INTEGER      {setRC(atoi($2), atoi($4));}
 
 aexpr: term
-    | term PLUS aexpr
-    |  term MINUS  aexpr;
-
-term: factor
-    |  factor MUL term
-    | factor DIV  term
+    | term PLUS aexpr                    {pushOperator($2);}
+    |  term MINUS  aexpr               {pushOperator($2);}
     ;
 
-factor: numval  
-    | rc  
+term: factor                    
+    |  factor MUL term              {pushOperator($2);}
+    | factor DIV  term                   {pushOperator($2);}
+    ;
+
+factor: numval                          {pushNum(atof($1));}
+    | rc                                {pushRC();}
     | LPAREN   aexpr  RPAREN   
     ;
 

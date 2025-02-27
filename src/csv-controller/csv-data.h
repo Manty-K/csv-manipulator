@@ -37,5 +37,6 @@ typedef struct csvData
 } CSV_DATA;
 
 void addDataToCSV(CSV_DATA *data);
+CSV_DATA *getEntryFromDatabase(RC rc);
 
 #endif

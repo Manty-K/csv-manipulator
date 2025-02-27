@@ -2,7 +2,7 @@ CFLAGS = -g -Wextra
 
 DATA_STRUTS = data-structures/array/array.c data-structures/queue/queue.c data-structures/stack/stack.c data-structures/tree/tree.c
 
-DEPS = csv.tab.c rules.tab.c lex.csv.c lex.rules.c main.c csv-controller/csv-controller.c csv-controller/csv-data.c output/output.c  rules-controller/rules-controller.c $(DATA_STRUTS)
+DEPS = csv.tab.c rules.tab.c lex.csv.c lex.rules.c main.c csv-controller/csv-controller.c csv-controller/csv-data.c output/output.c  rules-controller/rules-controller.c rules-controller/expression-handler.c $(DATA_STRUTS)
 
 all: e.o
 	./e.o -c test.csv -r trules.txt -o out.csv
