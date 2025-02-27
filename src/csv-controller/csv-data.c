@@ -201,6 +201,87 @@ void addDataToCSV(CSV_DATA *data)
     }
 }
 
+CSV_DATA *getEntryFromDatabase(RC rc)
+{
+    if (rc.colNo <= 0 || rc.rowNo <= 0)
+    {
+        fprintf(stderr, "Row or column <0 not allowed\n");
+        return NULL;
+    }
+
+    unsigned int size = getArraySize(csvDatabase);
+
+    int foundRow = 0;
+
+    unsigned int foundRowIndex;
+
+    unsigned int low = 0;
+    unsigned int high = size - 1;
+    unsigned int mid;
+    CSV_DATA *data;
+
+    while (low <= high)
+    {
+
+        mid = low + (high - low) / 2;
+
+        data = getElementArray(getElementArray(csvDatabase, mid), 0);
+
+        if (data->rowNo == rc.rowNo)
+        {
+
+            foundRow = 1;
+            foundRowIndex = mid;
+            break;
+        }
+        else if (data->rowNo < rc.rowNo)
+        {
+            low = mid + 1;
+        }
+        else
+        {
+            high = mid - 1;
+        }
+    }
+
+    if (!foundRow)
+    {
+        return NULL;
+    }
+
+    ARRAY *row = getElementArray(csvDatabase, foundRowIndex);
+
+    size = getArraySize(row);
+
+    low = 0;
+    high = size - 1;
+
+    while (low <= high)
+    {
+        mid = low + (high - low) / 2;
+
+        data = getElementArray(row, mid);
+
+        if (data->colNo == rc.colNo)
+        {
+
+            return data;
+        }
+        else if (data->colNo < rc.colNo)
+        {
+
+            low = mid + 1;
+        }
+        else
+        {
+
+            high = mid - 1;
+        }
+    }
+
+    return NULL;
+}
+
 void repeatPrintStr(char *str, unsigned int count)
 {
     for (unsigned int i = 0; i < count; i++)
@@ -251,11 +332,5 @@ void displayDatabase()
 
 void processOutput()
 {
-    // CSV_DATA *data = malloc(sizeof(CSV_DATA));
-    // data->colNo = 30,
-    // data->rowNo = 20;
-    // data->value.f = 15;
-    // data->valueType = NUM_TYPE;
-    // addDataToCSV(data);
     displayDatabase();
 }

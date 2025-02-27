@@ -20,6 +20,13 @@ enum valueType
     STR_TYPE,
 };
 
+typedef struct rc
+{
+    unsigned int rowNo;
+    unsigned int colNo;
+
+} RC;
+
 typedef struct csvData
 {
     int valueType;
