@@ -1,5 +1,6 @@
 #include "../common-headers.h"
 #include "functions.h"
+#include <float.h>
 extern RC currentRC;
 enum plane_op currentPlaneOp;
 
@@ -32,7 +33,7 @@ void checkValidPlaneCells()
 
 float sumOperation()
 {
-    checkValidPlaneCells(tl, br);
+    checkValidPlaneCells();
     RC rc;
     CSV_DATA *data;
 
@@ -59,13 +60,114 @@ float sumOperation()
     return result;
 }
 
+float avgOperation()
+{
+    checkValidPlaneCells();
+    RC rc;
+    CSV_DATA *data;
+
+    float result = 0;
+    unsigned int count = 0;
+
+    for (unsigned int col = tl.colNo; col <= br.colNo; col++)
+    {
+        for (unsigned int row = tl.rowNo; row <= br.rowNo; row++)
+        {
+            rc.rowNo = row;
+            rc.colNo = col;
+            data = getEntryFromDatabase(rc);
+            if (data == NULL)
+            {
+                continue;
+            }
+            if (data->valueType == NUM_TYPE)
+            {
+                result += data->value.f;
+                count++;
+            }
+        }
+    }
+    return result / count;
+}
+
+float minOperation()
+{
+    checkValidPlaneCells();
+    RC rc;
+    CSV_DATA *data;
+
+    float result = FLT_MAX;
+
+    for (unsigned int col = tl.colNo; col <= br.colNo; col++)
+    {
+        for (unsigned int row = tl.rowNo; row <= br.rowNo; row++)
+        {
+            rc.rowNo = row;
+            rc.colNo = col;
+            data = getEntryFromDatabase(rc);
+            if (data == NULL)
+            {
+                continue;
+            }
+            if (data->valueType == NUM_TYPE)
+            {
+                if (data->value.f < result)
+                {
+                    result = data->value.f;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+float maxOperation()
+{
+    checkValidPlaneCells();
+    RC rc;
+    CSV_DATA *data;
+
+    float result = FLT_MIN;
+
+    for (unsigned int col = tl.colNo; col <= br.colNo; col++)
+    {
+        for (unsigned int row = tl.rowNo; row <= br.rowNo; row++)
+        {
+            rc.rowNo = row;
+            rc.colNo = col;
+            data = getEntryFromDatabase(rc);
+            if (data == NULL)
+            {
+                continue;
+            }
+            if (data->valueType == NUM_TYPE)
+            {
+                if (data->value.f > result)
+                {
+                    result = data->value.f;
+                }
+            }
+        }
+    }
+    return result;
+}
+
 void planeOperation()
 {
     float result;
     switch (currentPlaneOp)
     {
     case SUM_OP:
-        result = sumOperation(tl, br);
+        result = sumOperation();
+        break;
+    case AVG_OP:
+        result = avgOperation();
+        break;
+    case MIN_OP:
+        result = minOperation();
+        break;
+    case MAX_OP:
+        result = maxOperation();
         break;
 
     default:
