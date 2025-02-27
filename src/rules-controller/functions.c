@@ -46,8 +46,6 @@ float sumOperation()
             rc.rowNo = row;
             rc.colNo = col;
             data = getEntryFromDatabase(rc);
-            // displayCSVDATA(data);
-
             if (data == NULL)
             {
                 continue;

@@ -66,6 +66,10 @@ void addStrValue(char *val, unsigned int row, unsigned int col)
 
 void displayCSVDATA(CSV_DATA *data)
 {
+    if (data == NULL)
+    {
+        return;
+    }
     switch (data->valueType)
     {
     case NUM_TYPE:
