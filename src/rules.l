@@ -6,6 +6,8 @@
 %option prefix="rules"
 %%
 
+\"([^\"]*)\"			{ ruleslval.s = strndup(yytext+1,yyleng-2);return STRING; }
+
 "r"              {return RSYM;}
 
 "c"              {return CSYM;}
@@ -13,6 +15,8 @@
 [0-9]+            {ruleslval.s = strdup(yytext);  return INTEGER;}
 
 [0-9]+(\.[0-9]+)?      { ruleslval.s = strdup(yytext);  return FLOAT;}
+
+\$[a-z]+[a-zA-Z0-9]*        {ruleslval.s = strdup(yytext); return LABEL; }
 
 ";"                         {ruleslval.s = strdup(yytext); return TERMINATOR;}
 

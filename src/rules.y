@@ -5,7 +5,7 @@
 %define api.prefix {rules}
 
 %token ASSIGN RSYM CSYM TERMINATOR
-%token <s> INTEGER FLOAT PLUS MINUS MUL DIV LPAREN RPAREN
+%token <s> INTEGER FLOAT PLUS MINUS MUL DIV LPAREN RPAREN LABEL STRING
 
 %type numval
 
@@ -24,9 +24,13 @@ stmts: stmt stmts
     |
     ;
 
-stmt: assign
+stmt: assign | assignStr
 
-assign : rc ASSIGN aexpr TERMINATOR
+assignStr: rc_or_lab ASSIGN STRING TERMINATOR
+
+assign : rc_or_lab ASSIGN aexpr TERMINATOR
+
+rc_or_lab : rc | LABEL
 
 rc : RSYM INTEGER CSYM INTEGER
 
@@ -41,6 +45,7 @@ term: factor
 
 factor: numval  
     | rc  
+    | LABEL
     | LPAREN   aexpr  RPAREN   
     ;
 
