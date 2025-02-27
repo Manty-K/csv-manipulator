@@ -290,6 +290,11 @@ void repeatPrintStr(char *str, unsigned int count)
     }
 }
 
+int hasDecimal(float num)
+{
+    return (num - (int)num) != 0.0;
+}
+
 void displayDatabase()
 {
     unsigned int currentRowIndex = 1;
@@ -324,7 +329,14 @@ void displayDatabase()
 
             if (data->valueType == NUM_TYPE)
             {
-                appendFile("%.1f", data->value.f);
+                if (hasDecimal(data->value.f))
+                {
+                    appendFile("%.1f", data->value.f);
+                }
+                else
+                {
+                    appendFile("%d", (int)data->value.f);
+                }
             }
         }
     }
