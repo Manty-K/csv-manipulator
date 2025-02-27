@@ -240,6 +240,10 @@ CSV_DATA *getEntryFromDatabase(RC rc)
         }
         else
         {
+            if (high == 0)
+            {
+                return NULL;
+            }
             high = mid - 1;
         }
     }
@@ -264,7 +268,6 @@ CSV_DATA *getEntryFromDatabase(RC rc)
 
         if (data->colNo == rc.colNo)
         {
-
             return data;
         }
         else if (data->colNo < rc.colNo)
@@ -274,11 +277,13 @@ CSV_DATA *getEntryFromDatabase(RC rc)
         }
         else
         {
-
+            if (high == 0)
+            {
+                return NULL;
+            }
             high = mid - 1;
         }
     }
-
     return NULL;
 }
 

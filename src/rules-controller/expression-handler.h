@@ -1,6 +1,6 @@
 
 
-#ifndef EXPRESSION_HANDLER_H
+#pragma once
 #include "../csv-controller/csv-data.h"
 
 typedef union expdataval
@@ -29,4 +29,4 @@ void setIndentifier();
 void pushRC();
 void pushNum(float num);
 void pushOperator(char *op);
-#endif
+void storeNumResultInDatabase(float result);

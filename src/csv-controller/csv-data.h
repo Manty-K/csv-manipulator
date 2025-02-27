@@ -1,5 +1,5 @@
 
-#ifndef CSV_DATA_H
+#pragma once
 void initializeCSVDatabase();
 
 void addNumValue(float val, unsigned int row, unsigned int col);
@@ -38,5 +38,4 @@ typedef struct csvData
 
 void addDataToCSV(CSV_DATA *data);
 CSV_DATA *getEntryFromDatabase(RC rc);
-
-#endif
+void displayCSVDATA(CSV_DATA *data);

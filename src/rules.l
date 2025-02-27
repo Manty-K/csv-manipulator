@@ -12,6 +12,11 @@
 
 "c"              {return CSYM;}
 
+"sum"             {return SUM;}
+"avg"           {return AVG;}
+"min"            {return MIN;}
+"max"              {return MAX;}
+
 [0-9]+            {ruleslval.s = strdup(yytext);  return INTEGER;}
 
 [0-9]+(\.[0-9]+)?      { ruleslval.s = strdup(yytext);  return FLOAT;}
@@ -30,6 +35,7 @@
 "/"     { ruleslval.s = strdup(yytext);  return DIV;}
 
 "<-"            {return ASSIGN;}
+":"             {return COLON;}
 
 \n                  ;
 

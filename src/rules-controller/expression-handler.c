@@ -158,10 +158,8 @@ float getResultOfCurrentTree()
     return traverseSolve(popStack(expstack));
 }
 
-void storeResultInDatabase()
+void storeNumResultInDatabase(float result)
 {
-
-    float result = getResultOfCurrentTree();
     CSV_DATA *data = malloc(sizeof(CSV_DATA));
     data->rowNo = identifier.rowNo;
     data->colNo = identifier.colNo;
@@ -172,6 +170,6 @@ void storeResultInDatabase()
 
 void expressionEnd()
 {
-    storeResultInDatabase();
+    storeNumResultInDatabase(getResultOfCurrentTree());
     freeStack(expstack);
 }

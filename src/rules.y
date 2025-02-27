@@ -1,14 +1,15 @@
 %{
     #include "common-headers.h"
-    #include "rules-controller/rules-controller.h"
-    #include "rules-controller/expression-handler.h"
+   #include "rules-controller/rules-controller.h"
+   #include "rules-controller/expression-handler.h"
+    #include "rules-controller/functions.h"
     int ruleslex(void);
     void ruleserror(const char *);
 %}
 %define api.prefix {rules}
 
-%token ASSIGN RSYM CSYM TERMINATOR
-%token <s> INTEGER FLOAT PLUS MINUS MUL DIV LPAREN RPAREN LABEL STRING
+%token ASSIGN RSYM CSYM TERMINATOR COLON SUM AVG MIN MAX
+%token <s> INTEGER FLOAT PLUS MINUS MUL DIV LPAREN RPAREN LABEL STRING 
 
 %type <s> numval
 
@@ -28,15 +29,21 @@ stmts: stmt stmts
     ;
 
 stmt: assign
-    | assignStr
     ;
 
-assignStr: rc ASSIGN STRING TERMINATOR { assignString($3);}
+
+assign : rc ASSIGN asnOps
+
+asnOps : STRING TERMINATOR { assignString($1);}
+    | { setIndentifier(); expressionStart();} aexpr { expressionEnd();} TERMINATOR
+    |{setIndentifier();} planeOps LPAREN rc {setTl();} COLON rc {setBr();} RPAREN TERMINATOR {planeOperation();}
+
+planeOps: 
+      SUM {setPlaneOp(SUM_OP);}
+    | AVG {setPlaneOp(AVG_OP);}
+    | MIN {setPlaneOp(MIN_OP);}
+    | MAX {setPlaneOp(MAX_OP);}
     ;
-
-assign : rc ASSIGN { setIndentifier(); expressionStart();} aexpr { expressionEnd();} TERMINATOR
-
-
 
 rc : RSYM INTEGER CSYM INTEGER      {setRC(atoi($2), atoi($4));}
 
