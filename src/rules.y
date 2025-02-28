@@ -8,7 +8,7 @@
 %}
 %define api.prefix {rules}
 
-%token ASSIGN RSYM CSYM TERMINATOR COLON SUM AVG MIN MAX
+%token ASSIGN RSYM CSYM TERMINATOR COLON SUM AVG MIN MAX SORT COMMA
 %token <s> INTEGER FLOAT PLUS MINUS MUL DIV LPAREN RPAREN LABEL STRING 
 
 %type <s> numval
@@ -36,7 +36,12 @@ assign : rc ASSIGN asnOps
 
 asnOps : STRING TERMINATOR { assignString($1);}
     | { setIndentifier(); expressionStart();} aexpr { expressionEnd();} TERMINATOR
-    |{setIndentifier();} planeOps LPAREN rc {setTl();} COLON rc {setBr();} RPAREN TERMINATOR {planeOperation();}
+    | {setIndentifier();} planeOps LPAREN rc {setTl();} COLON rc {setBr();} RPAREN TERMINATOR {planeOperation();}
+    | {setIndentifier();} SORT LPAREN rc {setTl();} COLON rc {setBr();} COMMA rorc RPAREN TERMINATOR {sortOperation();}
+    ;
+rorc: RSYM {setCurrentDirection(HORIZONTAL);}
+    | CSYM {setCurrentDirection(VERTICAL);}
+    ;
 
 planeOps: 
       SUM {setPlaneOp(SUM_OP);}

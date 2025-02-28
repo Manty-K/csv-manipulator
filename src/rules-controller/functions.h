@@ -6,12 +6,18 @@ enum plane_op
     AVG_OP,
     MIN_OP,
     MAX_OP,
-
 };
-void planeOperation();
+typedef enum direction
+{
+    VERTICAL,
+    HORIZONTAL,
+} DIRECTION;
 
+void planeOperation();
+void sortOperation();
 void setPlaneOp(enum plane_op op);
 void setTl();
 void setBr();
+void setCurrentDirection(DIRECTION direction);
 
 #endif

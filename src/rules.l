@@ -16,6 +16,7 @@
 "avg"           {return AVG;}
 "min"            {return MIN;}
 "max"              {return MAX;}
+"sort"              {return SORT;}
 
 [0-9]+            {ruleslval.s = strdup(yytext);  return INTEGER;}
 
@@ -24,6 +25,7 @@
 \$[a-z]+[a-zA-Z0-9]*        {ruleslval.s = strdup(yytext); return LABEL; }
 
 ";"                         {ruleslval.s = strdup(yytext); return TERMINATOR;}
+","                         {ruleslval.s = strdup(yytext); return COMMA;}
 
 "("                        {ruleslval.s = strdup(yytext); return LPAREN;}
 ")"                        {ruleslval.s = strdup(yytext); return RPAREN;}
