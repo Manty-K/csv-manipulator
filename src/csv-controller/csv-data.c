@@ -19,7 +19,7 @@ void addCSVDataToQueue(CSV_DATA *data)
 
 void createCSVDatabase()
 {
-    int index = -1;
+    unsigned int index = 0;
     ARRAY *r;
     unsigned int current = 0;
 
@@ -27,15 +27,14 @@ void createCSVDatabase()
     {
         CSV_DATA *data = dequeue(dataQueue);
 
-        if (index == -1 || current != data->rowNo)
+        if (index == 0 || current != data->rowNo)
         {
             r = createArray(1);
             current = data->rowNo;
             appendArray(csvDatabase, r);
             index++;
         }
-
-        appendArray(getElementArray(csvDatabase, index), data);
+        appendArray(getElementArray(csvDatabase, index - 1), data);
     }
     // printf("CSV data created\n Size: %zu\n", getArraySize(csvDatabase));
 
@@ -160,6 +159,12 @@ void insertOrAppend(CSV_DATA *data, size_t neval)
     ARRAY *arr = createArray(1);
     appendArray(arr, data);
     size_t csvsize = getArraySize(csvDatabase);
+
+    if (csvsize == 0)
+    {
+        appendArray(csvDatabase, arr);
+        return;
+    }
 
     CSV_DATA *last = getElementArray(getElementArray(csvDatabase, csvsize - 1), 0);
 
